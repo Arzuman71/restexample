@@ -19,13 +19,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/users")
-public class UserEndpoint {
+public class UserController {
 
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final JwtTokenUtil jwtTokenUtil;
 
-    public UserEndpoint(PasswordEncoder passwordEncoder, UserService userService, JwtTokenUtil jwtTokenUtil) {
+    public UserController(PasswordEncoder passwordEncoder, UserService userService, JwtTokenUtil jwtTokenUtil) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -43,15 +43,15 @@ public class UserEndpoint {
         if (passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword())) {
             String token = jwtTokenUtil.generateToken(user.getEmail());
             return ResponseEntity.ok(AuthenticationResponse.builder()
-                .token(token)
-                .userDto(UserDto.builder()
-                    .id(user.getId())
-                    .name(user.getName())
-                    .surname(user.getSurname())
-                    .email(user.getEmail())
-                    .userType(user.getUserType())
-                    .build())
-                .build());
+                    .token(token)
+                    .userDto(UserDto.builder()
+                            .id(user.getId())
+                            .name(user.getName())
+                            .surname(user.getSurname())
+                            .email(user.getEmail())
+                            .userType(user.getUserType())
+                            .build())
+                    .build());
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
     }
